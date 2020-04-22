@@ -1,0 +1,7 @@
+/Debug/*
+/Release/*
+/x64/*
+/*/x64/*
+/*/Debug/*
+/*/Release/*
+/scripts/__pycache__

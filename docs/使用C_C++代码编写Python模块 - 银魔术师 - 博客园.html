@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://www.cnblogs.com/silvermagic/p/9087896.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta property="og:description" content="假如我们要用C语言实现下面的python脚本bird.py 调用脚本main.py 执行效果如下 实现相同逻辑的原始C代码bird.c 下面我们要将原始C代码改造成可以被main.py的python模">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>使用C/C++代码编写Python模块 - 银魔术师 - 博客园</title>
+    
+    <link rel="stylesheet" href="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/bundle-codinglife.min.css">
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/bundle-codinglife-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/silvermagic/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/silvermagic/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/silvermagic/wlwmanifest.xml">
+    <script src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/pubads_impl_rendering_2020041602.js.下载"></script><script async="" src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/analytics.js.下载"></script><script src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+    <script src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/blog-common.min.js.下载"></script>
+    <script>
+        var currentBlogId = 387942;
+        var currentBlogApp = 'silvermagic';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var skinName = 'CodingLife';
+    </script>
+    
+    
+    
+<link rel="preload" href="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/f.txt"></script><script src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/pubads_impl_2020041602.js.下载" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-37/html/container.html"></head>
+<body><div id="big_banner" style="width: 1024px; margin: 10px auto; display: none;"><a href="https://developer.aliyun.com/topic/java2020?utm_content=g_1000113424" target="_blank"><img src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/35695-20200421225713738-2147049002.png" style="width: 1024px;"></a><span id="bigbanner_close">x</span></div>
+    <a name="top"></a>
+    
+    
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/silvermagic/"><img id="blogLogo" src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/logo.gif" alt="返回主页"></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/silvermagic/">银魔术师</a>
+</h1>
+<h2>
+
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/silvermagic/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E9%93%B6%E9%AD%94%E6%9C%AF%E5%B8%88">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/silvermagic/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			
+			<span id="stats_post_count">随笔 - 
+139&nbsp; </span>
+<span id="stats_article_count">文章 - 
+0&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+15</span>
+
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class="postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/silvermagic/p/9087896.html">使用C/C++代码编写Python模块</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+    <p>假如我们要用C语言实现下面的python脚本bird.py</p>
+<pre><code class="hljs python"><span class="hljs-keyword">import</span> os
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fly</span><span class="hljs-params">(name)</span>:</span>
+    print(name + <span class="hljs-string">" is flying.\n"</span>)
+</code></pre>
+<p>调用脚本main.py</p>
+<pre><code class="hljs haskell"><span class="hljs-keyword">import</span> bird
+
+<span class="hljs-title">bird</span>.fly(<span class="hljs-string">"fwd"</span>)
+</code></pre>
+<p>执行效果如下</p>
+<pre><code class="hljs shell"><span class="hljs-meta">&gt;</span><span class="bash"> python main.py</span>
+fwd is flying.
+</code></pre>
+<p>实现相同逻辑的原始C代码bird.c</p>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *name)</span>
+</span>{
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s is flying.\n"</span>, name);
+}
+</code></pre>
+<p>下面我们要将原始C代码改造成可以被main.py的python模块：</p>
+<ul>
+<li>包含头文件Python.h</li>
+<li>添加C函数fly的Python调用版本bird_fly</li>
+<li>添加向Python呈现C函数的方法表bird_methods</li>
+<li>添加模块初始化函数initbird（当动态库被python解释器搜索到时调用的函数）</li>
+</ul>
+<pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;Python.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">fly</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *name)</span>
+</span>{
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%s is flying.\n"</span>, name);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">static</span> PyObject *<span class="hljs-title">bird_fly</span><span class="hljs-params">(PyObject *self, PyObject *args)</span>
+</span>{
+    <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *name;
+    <span class="hljs-keyword">if</span> (!PyArg_ParseTuple(args, <span class="hljs-string">"s"</span>, &amp;name))
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;
+    fly(name);
+
+    Py_INCREF(Py_None);
+    <span class="hljs-keyword">return</span> Py_None;
+}
+
+<span class="hljs-keyword">static</span> PyMethodDef bird_methods[] = {
+    { <span class="hljs-string">"fly"</span>, bird_fly, METH_VARARGS, <span class="hljs-string">"Bird fly"</span> },
+{ <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, <span class="hljs-literal">NULL</span> }
+};
+
+<span class="hljs-function">PyMODINIT_FUNC <span class="hljs-title">initbird</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+</span>{
+    PyImport_AddModule(<span class="hljs-string">"bird"</span>);
+    Py_InitModule(<span class="hljs-string">"bird"</span>, bird_methods);
+}
+</code></pre>
+<h3 id="linux下编译">Linux下编译</h3>
+<pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash"> yum install -y python-devel</span>
+<span class="hljs-meta">#</span><span class="bash"> gcc -o bird.so `python-config --cflags` `python-config --libs` -shared bird.c</span>
+<span class="hljs-meta">#</span><span class="bash"><span class="hljs-comment">## 将main.py和bird.so放置在同一目录下</span></span>
+<span class="hljs-meta">#</span><span class="bash"> python main.py</span>
+fwd is flying.
+</code></pre>
+<h3 id="windows下编译">Windows下编译</h3>
+<p>VS2017（只需安装python2.7的64位版本即可，本地开发工具可不装）下创建空项目bird，然后添加源文件bird.cpp（内容同bird.c），项目配置如下：</p>
+<table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>属性</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>常规</td>
+<td>常规 &gt; 目标名称</td>
+<td>将此字段设置为与 Python 看到的模块名称完全匹配。</td>
+</tr>
+<tr>
+<td>常规</td>
+<td>常规 &gt; 目标扩展名</td>
+<td>.pyd</td>
+</tr>
+<tr>
+<td>常规</td>
+<td>项目默认值 &gt; 配置类型</td>
+<td>动态库(.dll)</td>
+</tr>
+<tr>
+<td>C/C++ &gt; 常规</td>
+<td>附加包含目录</td>
+<td>根据相应的安装添加 Python <code>include</code> 文件夹，例如 <code>C:\Python27amd64\include</code></td>
+</tr>
+<tr>
+<td>C/C++ &gt; 预处理器</td>
+<td>预处理器定义</td>
+<td>在字符串的开头添加 <code>Py_LIMITED_API;</code>，可限制可从 Python 调用的某些函数，并使代码在 Python 不同版本之间更易于移植。</td>
+</tr>
+<tr>
+<td>C/C++ &gt; 代码生成</td>
+<td>运行库</td>
+<td>多线程 DLL (/MD)（请参阅下面的“警告”）</td>
+</tr>
+<tr>
+<td>链接器 &gt; 常规</td>
+<td>附加库目录</td>
+<td>根据相应的安装添加包含 <code>.lib</code> 文件的 Python <code>libs</code> 文件夹，例如 <code>C:\Python27amd64\libs</code>。 （务必指向包含 <code>.lib</code>文件的 <code>libs</code> 文件夹，而非包含 <code>.py</code> 文件的 <code>Lib</code> 文件夹。）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="hljs css">### 记住选择<span class="hljs-selector-tag">release</span> + <span class="hljs-selector-tag">x64</span>编译模式，否则编译<span class="hljs-selector-tag">dll</span>会报错，然后将<span class="hljs-selector-tag">main</span><span class="hljs-selector-class">.py</span>和<span class="hljs-selector-tag">bird</span><span class="hljs-selector-class">.pyd</span>放置在同一目录下
+<span class="hljs-selector-tag">bird</span>\<span class="hljs-selector-tag">x64</span>\<span class="hljs-selector-tag">Release</span>&gt; <span class="hljs-selector-tag">python</span> <span class="hljs-selector-tag">main</span><span class="hljs-selector-class">.py</span>
+<span class="hljs-selector-tag">fwd</span> <span class="hljs-selector-tag">is</span> <span class="hljs-selector-tag">flying</span>.
+</code></pre>
+<h3 id="参考文档">参考文档</h3>
+<p><a href="https://docs.microsoft.com/zh-cn/visualstudio/python/cpp-and-python">创建适用于 Python 的 C++ 扩展</a></p>
+
+</div>
+<div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block"><div id="BlogPostCategory">
+    分类: 
+            <a href="https://www.cnblogs.com/silvermagic/category/1095943.html" target="_blank">编程</a></div>
+
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(9087896,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;4dc20727-c21e-e411-8d02-90b11c0b17d6&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/silvermagic/">银魔术师</a><br>
+            <a href="https://home.cnblogs.com/u/silvermagic/followees/">关注 - 1</a><br>
+            <a href="https://home.cnblogs.com/u/silvermagic/followers/">粉丝 - 19</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;4dc20727-c21e-e411-8d02-90b11c0b17d6&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(9087896,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(9087896,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/silvermagic/p/9087892.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/silvermagic/p/9087892.html" title="发布于 2018-05-25 12:13">Glib学习笔记（四）</a>
+    <br>
+    <a href="https://www.cnblogs.com/silvermagic/p/9087902.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/silvermagic/p/9087902.html" title="发布于 2018-05-25 12:16">Go环境搭建（Windows）</a>
+
+</div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2018-05-25 12:14</span>&nbsp;
+<a href="https://www.cnblogs.com/silvermagic/">银魔术师</a>&nbsp;
+阅读(<span id="post_view_count">4167</span>)&nbsp;
+评论(<span id="post_comment_count">2</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=9087896" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(9087896);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/highlight.min.js.下载"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 387942, cb_blogApp = 'silvermagic', cb_blogUserGuid = '4dc20727-c21e-e411-8d02-90b11c0b17d6';
+    var cb_entryId = 9087896, cb_entryCreatedDate = '2018-05-25 12:14', cb_postType = 1; 
+    loadViewCount(cb_entryId);
+</script><a name="!comments"></a>
+<div id="blog-comments-placeholder">
+
+<div id="comment_pager_top">
+    
+</div>
+
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"><div class="feedbackNoItems"></div></div>	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+				</div>
+				
+<a href="https://www.cnblogs.com/silvermagic/p/9087896.html#4370738" class="layer">#1楼</a>
+<a name="4370738" id="comment_anchor_4370738"></a>
+
+ 
+<span class="comment_date">2019-09-25 22:38</span>
+
+ 
+
+            <a id="a_comment_author_4370738" href="https://www.cnblogs.com/rabbull/" target="_blank">rabbull</a>
+
+			</div>
+			<div class="feedbackCon">
+				
+<div id="comment_body_4370738" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    博主您好，您的博客给了我很大帮助，但是在 python3 中 Py_InitModule 已经被弃用了，希望您可以更新博客内容以帮助更多学习者，谢谢！<br><br>ref:  <a href="https://stackoverflow.com/questions/28305731" target="_blank">https://stackoverflow.com/questions/28305731</a> 
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4370738, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4370738, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4370738_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1709725/20190608014837.png
+        </span>
+
+			</div>
+		</div>
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+				</div>
+				
+<a href="https://www.cnblogs.com/silvermagic/p/9087896.html#4380481" class="layer">#2楼</a>
+<a name="4380481" id="comment_anchor_4380481"></a>
+[<span class="louzhu">楼主</span>]
+        <span id="comment-maxId" style="display:none">4380481</span>
+        <span id="comment-maxDate" style="display:none">2019/10/5 下午11:13:03</span>
+ 
+<span class="comment_date">2019-10-05 23:13</span>
+
+ 
+
+            <a id="a_comment_author_4380481" href="https://www.cnblogs.com/silvermagic/" target="_blank">银魔术师</a>
+
+			</div>
+			<div class="feedbackCon">
+				
+<div id="comment_body_4380481" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    <a href="https://www.cnblogs.com/silvermagic/p/9087896.html#4370738" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,4370738);">@</a>
+rabbull<br>这块很长时间没使用了，以后抽空研究下Python3的实现
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4380481, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4380481, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+			</div>
+		</div>
+
+<div id="comment_pager_bottom">
+    
+</div>
+
+
+</div>
+<script>
+    var commentManager = new blogCommentManager();
+    commentManager.renderComments(0);
+</script>
+
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/silvermagic/p/9087896.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/silvermagic/p/9087896.html#top">返回顶部</a></div>
+    <div id="comment_form_container" style="visibility: visible;"><div class="login_tips">
+    注册用户登录后才能发表评论，请 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a>
+     或 
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页。
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-ucancode&#39;)">【推荐】超50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://developer.aliyun.com/topic/java2020?utm_content=g_1000113424" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云开发者社区&#39;)">【重磅】会当凌绝顶，一览众山小，《Java开发手册》泰山版正式发布</a><br><a href="https://cloud.tencent.com/act/seckill?fromSource=gwzcw.3498755.3498755.3498755&amp;utm_medium=cpc&amp;utm_id=gwzcw.3498755.3498755.3498755" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-腾讯云&#39;)">【推荐】腾讯云产品限时秒杀，爆款1核2G云服务器99元/年！</a><br><a href="https://developer.aliyun.com/article/755632?utm_content=g_1000113709" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云开发者社区&#39;)">【推荐】开放下载！《15分钟打造你自己的小程序》</a><br><a href="https://developer.aliyun.com/article/727136?utm_content=g_1000104144" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云开发者社区&#39;)">【推荐】独家下载 |《大数据工程师必读手册》揭秘阿里如何玩转大数据</a><br></div>
+    <div id="opt_under_post"></div>
+    <script async="async" src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/gpt.js.下载"></script>
+    <script>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+    <script>
+        googletag.cmd.push(function () {
+            googletag.defineSlot("/1090369/C1", [300, 250], "div-gpt-ad-1546353474406-0").addService(googletag.pubads());
+            googletag.defineSlot("/1090369/C2", [468, 60], "div-gpt-ad-1539008685004-0").addService(googletag.pubads());
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+    </script>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CLmP4-_1-ugCFQkaKgodMXwAkg"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./使用C_C++代码编写Python模块 - 银魔术师 - 博客园_files/saved_resource.html"></iframe></div></div>
+    </div>
+    <div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a title="【C++】利用Visual Studio 2008编写C++，Visual Studio 2008的基本使用" href="https://www.cnblogs.com/iczelion/p/6064120.html" target="_blank" onclick="clickRecomItmem(6064120)">【C++】利用Visual Studio 2008编写C++，Visual Studio 2008的基本使用</a><br>·  <a title="Python实例浅谈之三Python与C/C++相互调用" href="https://www.cnblogs.com/apexchu/p/5015961.html" target="_blank" onclick="clickRecomItmem(5015961)">Python实例浅谈之三Python与C/C++相互调用</a><br>·  <a title="如何在Windows平台使用VS搭建C++/Lua的开发环境" href="https://www.cnblogs.com/sevenyuan/p/4511881.html" target="_blank" onclick="clickRecomItmem(4511881)">如何在Windows平台使用VS搭建C++/Lua的开发环境</a><br>·  <a title="Python和C++交互" href="https://www.cnblogs.com/ldlchina/p/4014774.html" target="_blank" onclick="clickRecomItmem(4014774)">Python和C++交互</a><br>·  <a title="Python实例浅谈之三Python与C/C++相互调用" href="https://www.cnblogs.com/yanzi-meng/p/8066944.html" target="_blank" onclick="clickRecomItmem(8066944)">Python实例浅谈之三Python与C/C++相互调用</a><br>»  <a target="_blank" href="https://recomm.cnblogs.com/blogpost/9087896">更多推荐...</a><div id="cnblogs_t5"><a href="https://developer.aliyun.com/article/727136?utm_content=g_1000104144" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T5-阿里云开发者社区&#39;)">独家下载 |《大数据工程师必读手册》揭秘阿里如何玩转大数据</a></div></div></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CLqP4-_1-ugCFQkaKgodMXwAkg">
+            <script>
+                if (new Date() >= new Date(2018, 9, 13)) {
+                    googletag.cmd.push(function () { googletag.display("div-gpt-ad-1539008685004-0"); });
+                }
+            </script>
+        <div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none; width: 468px; height: 60px;"></div></div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·              <a href="https://news.cnblogs.com/n/660301/" target="_blank">从20张屏幕截图中了解Ubuntu 20.04 LTS</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/660300/" target="_blank">阿里上线“核酸检测”最快24小时内拿到电子报告</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/660299/" target="_blank">尚未聘请审计机构 暴风集团预计无法按期披露财报</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/660298/" target="_blank">谷歌推广Healthcare API​：让患者和医生更容易分享健康信息</a>
+            <br>
+ ·              <a href="https://news.cnblogs.com/n/660288/" target="_blank">三大运营商5G征服珠穆朗玛峰：海拔5200米全覆盖</a>
+            <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+        fixPostBody();
+        deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);        deliverAdT2();
+        deliverAdC1();
+        deliverAdC2();
+        loadNewsAndKb();
+        loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);        LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+        GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+        loadOptUnderPost();
+        GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+    </script>
+</div>
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<div id="sidebar_news" class="newsItem"><!--done-->
+<h3 class="catListTitle">公告</h3>
+
+<div id="blog-news">
+    
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/silvermagic/">
+            银魔术师
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/silvermagic/" title="入园时间：2014-08-08">
+            5年8个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/silvermagic/followers/">
+            19
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/silvermagic/followees/">
+            1
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;4dc20727-c21e-e411-8d02-90b11c0b17d6&#39;)">+加关注</a></div>
+        <script>getFollowStatus('4dc20727-c21e-e411-8d02-90b11c0b17d6');</script>
+    </div>
+</div>
+
+</div>
+
+			<div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2020/03/22&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2020年4月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2020/05/22&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+                    <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+                    <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+                    <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+                    <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+                    <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+                    <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+                    <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+        </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                            <td class="CalOtherMonthDay" align="center">31</td>
+                        <td class="" align="center">
+                            1
+                        </td>
+                        <td class="" align="center">
+                            2
+                        </td>
+                        <td class="" align="center">
+                            3
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        4
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            5
+                        </td>
+                            <td class="" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                7
+                            </td>
+                            <td class="" align="center">
+                                8
+                            </td>
+                            <td class="" align="center">
+                                9
+                            </td>
+                            <td class="" align="center">
+                                10
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            11
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            12
+                        </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                            <td class="" align="center">
+                                14
+                            </td>
+                            <td class="" align="center">
+                                15
+                            </td>
+                            <td class="" align="center">
+                                16
+                            </td>
+                            <td class="" align="center">
+                                17
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            18
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            19
+                        </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                            <td class="" align="center">
+                                21
+                            </td>
+                            <td class="CalTodayDay" align="center">
+                                22
+                            </td>
+                            <td class="" align="center">
+                                23
+                            </td>
+                            <td class="" align="center">
+                                24
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            25
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            26
+                        </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                            <td class="" align="center">
+                                29
+                            </td>
+                            <td class="" align="center">
+                                30
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                1
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            2
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            3
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                7
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                8
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            9
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn">
+<!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+<div id="sidebar_shortcut" class="sidebar-block">
+    <div class="catListLink">
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+		<li>
+
+<a href="https://www.cnblogs.com/silvermagic/p/" title="我的博客的随笔列表">我的随笔</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/silvermagic/MyComments.html" title="我的发表过的评论列表">我的评论</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/silvermagic/OtherPosts.html" title="我评论过的随笔列表">我的参与</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/silvermagic/RecentComments.html" title="我的博客的评论列表">最新评论</a>
+</li>
+		<li>
+
+<a href="https://www.cnblogs.com/silvermagic/tag/" title="我的博客的标签列表">我的标签</a>
+</li>
+
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div>
+
+
+</div>
+
+<!-- 最新随笔 -->
+
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block">
+    
+</div>
+
+<!-- 积分与排名 -->
+
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+    
+        <div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+            <h3 class="catListTitle">
+                
+
+随笔分类
+
+
+
+            </h3>
+
+
+            <ul>
+
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095934.html" rel="" target="">
+    Linux(16)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095978.html" rel="" target="">
+    OpenStack(7)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095944.html" rel="" target="">
+    版本控制(6)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095943.html" rel="" target="">
+    编程(30)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095936.html" rel="" target="">
+    编译工具(8)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1096002.html" rel="" target="">
+    存储虚拟化(9)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1223518.html" rel="" target="">
+    翻译(13)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095941.html" rel="" target="">
+    分布式系统(4)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1096011.html" rel="" target="">
+    监控系统(5)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1096004.html" rel="" target="">
+    容器虚拟化(5)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095938.html" rel="" target="">
+    网络虚拟化(15)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095940.html" rel="" target="">
+    游戏开发(8)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1095994.html" rel="" target="">
+    主机虚拟化(6)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1096000.html" rel="" target="">
+    桌面虚拟化(3)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/category/1096005.html" rel="" target="">
+    自动化部署(4)
+</a>
+ 
+
+                        </li>
+
+            </ul>
+
+
+        </div>
+        <div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+            <h3 class="catListTitle">
+                
+
+随笔档案
+
+
+
+            </h3>
+
+
+            <ul>
+
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/archive/2018/07.html" rel="" target="">
+    2018年7月(1)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/archive/2018/06.html" rel="" target="">
+    2018年6月(1)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/archive/2018/05.html" rel="" target="">
+    2018年5月(53)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/silvermagic/archive/2017/10.html" rel="" target="">
+    2017年10月(84)
+</a>
+ 
+
+                        </li>
+
+            </ul>
+
+
+        </div>
+
+</div>
+
+<!-- 最新评论 -->
+<div id="sidebar_recentcomments" class="sidebar-block">
+    <div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div class="RecentCommentBlock">
+        <ul>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/silvermagic/p/7665868.html">1. Re:Automake使用说明</a></li>
+                    <li class="recent_comment_body">@ 银魔术师我昨天尝试了这么做，后面发现这样只是把依赖库的CFLAGS和LIBS变量传过去makefile而已，要通过编译还得在makefile.am上稍作修改。感谢你的回答。...</li>
+                    <li class="recent_comment_author">--kato0315</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/silvermagic/p/7665868.html">2. Re:Automake使用说明</a></li>
+                    <li class="recent_comment_body">@ kato0315修改configure.ac文件，可以参考它依赖的glib-2.0的方法，如下：PKG_CHECK_MODULES(GLIB2, glib-2.0 &gt;= 2.28)AC_SUBST...</li>
+                    <li class="recent_comment_author">--银魔术师</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/silvermagic/p/7665868.html">3. Re:Automake使用说明</a></li>
+                    <li class="recent_comment_body">请问如果我要在spice-gtk上添加其他的库进行编译比如ffmpeg，要如何操作能编译成功？</li>
+                    <li class="recent_comment_author">--kato0315</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/silvermagic/p/9087896.html">4. Re:使用C/C++代码编写Python模块</a></li>
+                    <li class="recent_comment_body">@ rabbull这块很长时间没使用了，以后抽空研究下Python3的实现...</li>
+                    <li class="recent_comment_author">--银魔术师</li>
+                    <li class="recent_comment_title"><a href="https://www.cnblogs.com/silvermagic/p/9087896.html">5. Re:使用C/C++代码编写Python模块</a></li>
+                    <li class="recent_comment_body">博主您好，您的博客给了我很大帮助，但是在 python3 中 Py_InitModule 已经被弃用了，希望您可以更新博客内容以帮助更多学习者，谢谢！ref:...</li>
+                    <li class="recent_comment_author">--rabbull</li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    <div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/9087593.html">
+                            1. Protocol Buffers官方文档(开发指南)(12093)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/7665975.html">
+                            2. kolla-ansible安装openstack(Ocata)(6762)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/9087879.html">
+                            3. gRPC官方文档(gRPC基础：C++)(6287)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/9087876.html">
+                            4. gRPC官方文档(通讯协议)(6018)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/7665868.html">
+                            5. Automake使用说明(5752)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+<!-- 评论排行榜 -->
+<div id="sidebar_topcommentedposts" class="sidebar-block">
+    <div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/7665975.html">
+                            1. kolla-ansible安装openstack(Ocata)(5)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/7665868.html">
+                            2. Automake使用说明(3)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/9087539.html">
+                            3. Protocol Buffers官方文档(proto3语言指南)(2)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/7665993.html">
+                            4. ansible无网络安装openstack(Newton)(2)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/silvermagic/p/9087896.html">
+                            5. 使用C/C++代码编写Python模块(2)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+
+
+</div>
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+    
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">推荐排行榜</h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/silvermagic/p/9087593.html">
+                                1. Protocol Buffers官方文档(开发指南)(1)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright © 2020 银魔术师
+<br><span id="poweredby">Powered by .NET Core on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    
+
+</body></html>
