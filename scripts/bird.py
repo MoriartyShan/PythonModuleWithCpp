@@ -1,3 +1,3 @@
-import bird
+import module_func
 
-bird.fly("fwd", "Dalian", 134)
+module_func.call_cpp("fwd", "Dalian")

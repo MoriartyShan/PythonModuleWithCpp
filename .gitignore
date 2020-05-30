@@ -5,3 +5,5 @@
 /*/Debug/*
 /*/Release/*
 /scripts/__pycache__
+/CMakeBuild/*
+/.vs/*
