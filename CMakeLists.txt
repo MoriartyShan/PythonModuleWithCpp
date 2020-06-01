@@ -31,3 +31,5 @@ target_link_libraries(${target_name}
   ${PYTHON_LIBRARY}
 )
 set_target_properties(${target_name}  PROPERTIES SUFFIX ".pyd")
+
+add_subdirectory(PythonExtention)
