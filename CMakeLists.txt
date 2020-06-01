@@ -5,7 +5,6 @@ project(PyModule)
 find_package(PythonLibs 3.0 REQUIRED)
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
 
-
 set (target_name "module_func")
 add_library(${target_name}   SHARED
 	src/func.cpp
@@ -17,7 +16,7 @@ target_link_libraries(${target_name}
 )
 set_target_properties(${target_name}  PROPERTIES SUFFIX ".pyd")
 
-find_package(Eigen3 REQUIRED 3.3.7)
+find_package(Eigen3 REQUIRED 3.3.0)
 message(STATUS "find eigen3 from " ${Eigen3_DIR})
 message(STATUS "Found required Eigen: "
   "Eigen version ${Eigen3_VERSION} in ${EIGEN3_INCLUDE_DIRS}")

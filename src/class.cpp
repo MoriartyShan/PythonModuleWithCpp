@@ -4,6 +4,7 @@
 #include <structmember.h>
 #include <iostream>
 #include <sstream>
+#define PY_USE_VERSION (PY_MAJOR_VERSION * 10 + PY_MINOR_VERSION)
 
 
 typedef struct _EigenUtil{
@@ -21,11 +22,11 @@ static PyMemberDef DataMembers[] = {
      { NULL, NULL, NULL, 0, NULL }
 };
 
-static void EigneUtil_init(EigenUtil* Self, PyObject* pArgs)        //构造方法.
+static int EigneUtil_init(EigenUtil* Self, PyObject* pArgs)        //构造方法.
 {
   int size = -1;
   if (!PyArg_ParseTuple(pArgs, "i", &size)) {
-    return;
+    return -1;
   }
   Self->a.resize(size, size);
   Self->b.resize(size, size);
@@ -34,13 +35,15 @@ static void EigneUtil_init(EigenUtil* Self, PyObject* pArgs)        //构造方法.
   Self->b.setRandom();
 
   std::cout << __FILE__ << ":" << __LINE__ << ": a= \n" << Self->a << std::endl;
-  std::cout << __FILE__ << ":" << __LINE__ << ": a= \n" << Self->b << std::endl;
+  std::cout << __FILE__ << ":" << __LINE__ << ": b= \n" << Self->b << std::endl;
+  return 0;
 }
 
 static void EigneUtil_deconstruct(EigenUtil* Self)        //析构方法.
 {
-  std::cout << __FILE__ << ":" << __LINE__ << ":" << "release";
+  std::cout << __FILE__ << ":" << __LINE__ << ":" << "release\n";
   Py_TYPE(Self)->tp_free((PyObject*)Self);
+  return;
 }
 
 static PyObject *PyMatrix_str(PyObject  *self) {
@@ -58,89 +61,171 @@ static PyGetSetDef MatrixGetSet[] = {
     {nullptr} };
 
 static PyTypeObject EigenMatrixType = {
-    PyVarObject_HEAD_INIT(nullptr, 0)
-    "module_class.matrix",/* For printing, in format "<module>.<name>" */
-    sizeof(EigenUtil), 0, /* For allocation */
+#ifdef PY_USE_VERSION == 37
+  PyVarObject_HEAD_INIT(nullptr, 0)
+  "module_class.matrix",//const char *tp_name; /* For printing, in format "<module>.<name>" */
+  sizeof(EigenUtil), 0, /* For allocation */
 
-    /* Methods to implement standard operations */
+/* Methods to implement standard operations */
 
-    (destructor)EigneUtil_deconstruct,
-    0,//Py_ssize_t tp_vectorcall_offset;
-    nullptr, //getattrfunc tp_getattr;
-    nullptr, //setattrfunc tp_setattr;
-    nullptr, //PyAsyncMethods *tp_as_async; /* formerly known as tp_compare (Python 2)
-                             //       or tp_reserved (Python 3) */
-    nullptr, //reprfunc tp_repr;
+  (destructor)EigneUtil_deconstruct,
+  nullptr, //printfunc tp_print;
+  nullptr, //getattrfunc tp_getattr;
+  nullptr, //setattrfunc tp_setattr;
+  nullptr, //PyAsyncMethods *tp_as_async; /* formerly known as tp_compare (Python 2)
+                                //  or tp_reserved (Python 3) */
+  nullptr, //reprfunc tp_repr;
 
-    /* Method suites for standard classes */
+/* Method suites for standard classes */
 
-    nullptr, //PyNumberMethods *tp_as_number;
-    nullptr, //PySequenceMethods *tp_as_sequence;
-    nullptr, //PyMappingMethods *tp_as_mapping;
+  nullptr, //PyNumberMethods *tp_as_number;
+  nullptr, //PySequenceMethods *tp_as_sequence;
+  nullptr, //PyMappingMethods *tp_as_mapping;
 
-    /* More standard operations (here for binary compatibility) */
+/* More standard operations (here for binary compatibility) */
 
-    nullptr, //hashfunc tp_hash;
-    nullptr, //ternaryfunc tp_call;
-    PyMatrix_str, //reprfunc tp_str;
-    nullptr, //getattrofunc tp_getattro;
-    nullptr, //setattrofunc tp_setattro;
+  nullptr, //hashfunc tp_hash;
+  nullptr, //ternaryfunc tp_call;
+  PyMatrix_str, //reprfunc tp_str;
+  nullptr, //getattrofunc tp_getattro;
+  nullptr, //setattrofunc tp_setattro;
 
-    /* Functions to access object as input/output buffer */
-    nullptr,//PyBufferProcs *tp_as_buffer;
+/* Functions to access object as input/output buffer */
+  nullptr, //PyBufferProcs *tp_as_buffer;
 
-    /* Flags to define presence of optional/expanded features */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,//unsigned long tp_flags;
+/* Flags to define presence of optional/expanded features */
+  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, //unsigned long tp_flags;
 
-     "test eigen usage",//const char *tp_doc; /* Documentation string */
+  "test eigen usage", //const char *tp_doc; /* Documentation string */
 
-    /* Assigned meaning in release 2.0 */
-    /* call function for all accessible objects */
-    nullptr,//traverseproc tp_traverse;
+/* Assigned meaning in release 2.0 */
+/* call function for all accessible objects */
+  nullptr, //traverseproc tp_traverse;
 
-    /* delete references to contained objects */
-    nullptr, //inquiry tp_clear;
+/* delete references to contained objects */
+  nullptr, //inquiry tp_clear;
 
-    /* Assigned meaning in release 2.1 */
-    /* rich comparisons */
-    nullptr, ///richcmpfunc tp_richcompare;
+/* Assigned meaning in release 2.1 */
+/* rich comparisons */
+  nullptr, //richcmpfunc tp_richcompare;
 
-    /* weak reference enabler */
-    0, //Py_ssize_t tp_weaklistoffset;
+/* weak reference enabler */
+  0, //Py_ssize_t tp_weaklistoffset;
 
-    /* Iterators */
-    nullptr, //getiterfunc tp_iter;
-    nullptr, //iternextfunc tp_iternext;
+/* Iterators */
+  nullptr, //getiterfunc tp_iter;
+  nullptr, //iternextfunc tp_iternext;
 
-    /* Attribute descriptor and subclassing stuff */
-    nullptr, //struct PyMethodDef *tp_methods;
-    nullptr, //struct PyMemberDef *tp_members;
-    nullptr, //struct PyGetSetDef *tp_getset;
-    nullptr, //struct _typeobject *tp_base;
-    nullptr, //PyObject *tp_dict;
-   nullptr, // descrgetfunc tp_descr_get;
-    nullptr, //descrsetfunc tp_descr_set;
-    0, //Py_ssize_t tp_dictoffset;
-    (initproc)EigneUtil_init,// initproc tp_init;
-    nullptr, //allocfunc tp_alloc;
-    nullptr,//newfunc tp_new;
-    nullptr, //freefunc tp_free; /* Low-level free-memory routine */
-    nullptr, //inquiry tp_is_gc; /* For PyObject_IS_GC */
-    nullptr, //PyObject *tp_bases;
-    nullptr, //PyObject *tp_mro; /* method resolution order */
-    nullptr, //PyObject *tp_cache;
-    nullptr, //PyObject *tp_subclasses;
-    nullptr, //PyObject *tp_weaklist;
-    nullptr, //destructor tp_del;
+/* Attribute descriptor and subclassing stuff */
+  nullptr, //struct PyMethodDef *tp_methods;
+  nullptr, //struct PyMemberDef *tp_members;
+  nullptr, //struct PyGetSetDef *tp_getset;
+  nullptr, //struct _typeobject *tp_base;
+  nullptr, //PyObject *tp_dict;
+  nullptr, //descrgetfunc tp_descr_get;
+  nullptr, //descrsetfunc tp_descr_set;
+  0, //Py_ssize_t tp_dictoffset;
+  (initproc)EigneUtil_init, //initproc tp_init;
+  nullptr, //allocfunc tp_alloc;
+  nullptr, //newfunc tp_new;
+  nullptr, //freefunc tp_free; /* Low-level free-memory routine */
+  nullptr, //inquiry tp_is_gc; /* For PyObject_IS_GC */
+  nullptr, //PyObject *tp_bases;
+  nullptr, //PyObject *tp_mro; /* method resolution order */
+  nullptr, //PyObject *tp_cache;
+  nullptr, //PyObject *tp_subclasses;
+  nullptr, //PyObject *tp_weaklist;
+  nullptr, //destructor tp_del;
 
-    /* Type attribute cache version tag. Added in version 2.6 */
-    1,//unsigned int tp_version_tag;
+/* Type attribute cache version tag. Added in version 2.6 */
+  1, //unsigned int tp_version_tag;
 
-    nullptr, //destructor tp_finalize;
-    nullptr, //dvectorcallfunc tp_vectorcall;
+  nullptr, //destructor tp_finalize;
+#elif  PY_THIS_VERSION == 38
+  PyVarObject_HEAD_INIT(nullptr, 0)
+  "module_class.matrix",/* For printing, in format "<module>.<name>" */
+  sizeof(EigenUtil), 0, /* For allocation */
 
-    /* bpo-37250: kept for backwards compatibility in CPython 3.8 only */
-    //Py_DEPRECATED(3.8)// nullptr//int(*tp_print)(PyObject *, FILE *, int);
+  /* Methods to implement standard operations */
+
+  (destructor)EigneUtil_deconstruct,
+  0,//Py_ssize_t tp_vectorcall_offset;
+  nullptr, //getattrfunc tp_getattr;
+  nullptr, //setattrfunc tp_setattr;
+  nullptr, //PyAsyncMethods *tp_as_async; /* formerly known as tp_compare (Python 2)
+                           //       or tp_reserved (Python 3) */
+  nullptr, //reprfunc tp_repr;
+
+  /* Method suites for standard classes */
+
+  nullptr, //PyNumberMethods *tp_as_number;
+  nullptr, //PySequenceMethods *tp_as_sequence;
+  nullptr, //PyMappingMethods *tp_as_mapping;
+
+  /* More standard operations (here for binary compatibility) */
+
+  nullptr, //hashfunc tp_hash;
+  nullptr, //ternaryfunc tp_call;
+  PyMatrix_str, //reprfunc tp_str;
+  nullptr, //getattrofunc tp_getattro;
+  nullptr, //setattrofunc tp_setattro;
+
+  /* Functions to access object as input/output buffer */
+  nullptr,//PyBufferProcs *tp_as_buffer;
+
+  /* Flags to define presence of optional/expanded features */
+  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,//unsigned long tp_flags;
+
+  "test eigen usage",//const char *tp_doc; /* Documentation string */
+
+ /* Assigned meaning in release 2.0 */
+ /* call function for all accessible objects */
+  nullptr,//traverseproc tp_traverse;
+
+  /* delete references to contained objects */
+  nullptr, //inquiry tp_clear;
+
+  /* Assigned meaning in release 2.1 */
+  /* rich comparisons */
+  nullptr, ///richcmpfunc tp_richcompare;
+
+  /* weak reference enabler */
+  0, //Py_ssize_t tp_weaklistoffset;
+
+  /* Iterators */
+  nullptr, //getiterfunc tp_iter;
+  nullptr, //iternextfunc tp_iternext;
+
+  /* Attribute descriptor and subclassing stuff */
+  nullptr, //struct PyMethodDef *tp_methods;
+  nullptr, //struct PyMemberDef *tp_members;
+  nullptr, //struct PyGetSetDef *tp_getset;
+  nullptr, //struct _typeobject *tp_base;
+  nullptr, //PyObject *tp_dict;
+  nullptr, // descrgetfunc tp_descr_get;
+  nullptr, //descrsetfunc tp_descr_set;
+  0, //Py_ssize_t tp_dictoffset;
+  (initproc)EigneUtil_init,// initproc tp_init;
+  nullptr, //allocfunc tp_alloc;
+  nullptr,//newfunc tp_new;
+  nullptr, //freefunc tp_free; /* Low-level free-memory routine */
+  nullptr, //inquiry tp_is_gc; /* For PyObject_IS_GC */
+  nullptr, //PyObject *tp_bases;
+  nullptr, //PyObject *tp_mro; /* method resolution order */
+  nullptr, //PyObject *tp_cache;
+  nullptr, //PyObject *tp_subclasses;
+  nullptr, //PyObject *tp_weaklist;
+  nullptr, //destructor tp_del;
+
+  /* Type attribute cache version tag. Added in version 2.6 */
+  1,//unsigned int tp_version_tag;
+
+  nullptr, //destructor tp_finalize;
+  nullptr, //dvectorcallfunc tp_vectorcall;
+
+  /* bpo-37250: kept for backwards compatibility in CPython 3.8 only */
+  //Py_DEPRECATED(3.8)// nullptr//int(*tp_print)(PyObject *, FILE *, int);
+#endif
 };
 
 static PyModuleDef module = {
